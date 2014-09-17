@@ -859,7 +859,7 @@ typedef struct
 
 // this structure is cleared on each PutClientInServer(),
 // except for 'client->pers'
-struct gclient_s
+struct gclient_s //heres where you add player specific data and variable.
 {
 	// known to server
 	player_state_t	ps;				// communicated by server to clients
@@ -946,7 +946,7 @@ struct gclient_s
 
 struct edict_s
 {
-	entity_state_t	s;
+	entity_state_t	s; //every ent has a copy of s
 	struct gclient_s	*client;	// NULL if not a player
 									// the server expects the first part
 									// of gclient_s to be a player_state_t
@@ -1020,7 +1020,7 @@ struct edict_s
 
 	float		nextthink;
 	void		(*prethink) (edict_t *ent);
-	void		(*think)(edict_t *self);
+	void		(*think)(edict_t *self); //make a think function
 	void		(*blocked)(edict_t *self, edict_t *other);	//move to moveinfo?
 	void		(*touch)(edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf);
 	void		(*use)(edict_t *self, edict_t *other, edict_t *activator);
@@ -1091,5 +1091,7 @@ struct edict_s
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
+
+	// add my custom mod data here
 };
 

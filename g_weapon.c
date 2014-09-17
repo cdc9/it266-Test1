@@ -378,8 +378,11 @@ fire_grenade
 */
 static void Grenade_Explode (edict_t *ent)
 {
+	int i;
+	int x;
 	vec3_t		origin;
 	int			mod;
+	vec3_t		random_dir;
 
 	if (ent->owner->client)
 		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
@@ -430,6 +433,17 @@ static void Grenade_Explode (edict_t *ent)
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
 
+		if (strncmp(ent->classname,"grenade",8) == 0) // This will make the grenade split into two rockets
+		{
+			for (i = 0; i < 2; i++)
+			{
+				random_dir[0] = crandom();
+				random_dir[1] = crandom();
+				random_dir[2] = crandom();
+				fire_rocket(ent->owner, ent->s.origin,random_dir, 100, 600, 120, 80);
+			}
+		}
+
 	G_FreeEdict (ent);
 }
 
@@ -475,7 +489,8 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 
 	grenade = G_Spawn();
 	VectorCopy (start, grenade->s.origin);
-	VectorScale (aimdir, speed, grenade->velocity);
+	//VectorScale (aimdir, speed, grenade->velocity); original code
+	VectorScale (aimdir, 1000, grenade->velocity); //trying to change shot speed of grenade launcher
 	VectorMA (grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
 	VectorMA (grenade->velocity, crandom() * 10.0, right, grenade->velocity);
 	VectorSet (grenade->avelocity, 300, 300, 300);
@@ -551,6 +566,9 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 {
 	vec3_t		origin;
 	int			n;
+	int			i;
+	vec3_t		random_dir;
+	vec3_t		random_dir2;
 
 	if (other == ent->owner)
 		return;
@@ -594,6 +612,14 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	// fire rails here
+	for (i = 0; i < 4; i++)
+		{
+			random_dir[0] = crandom();
+			random_dir[1] = crandom();
+			random_dir[2] = crandom();
+			fire_rail(ent ->owner, ent->s.origin, random_dir, 100, 0);
+		}
 
 	G_FreeEdict (ent);
 }
@@ -617,7 +643,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
 	rocket->nextthink = level.time + 8000/speed;
-	rocket->think = G_FreeEdict;
+	rocket->think = G_FreeEdict; //free the rocket from game engine if it hasn't hit anything in a long time
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;
@@ -640,6 +666,8 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 {
 	vec3_t		from;
 	vec3_t		end;
+	vec3_t		dir;
+	vec3_t		bfg_origin;
 	trace_t		tr;
 	edict_t		*ignore;
 	int			mask;
@@ -690,7 +718,6 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 		gi.WritePosition (tr.endpos);
 		gi.multicast (tr.endpos, MULTICAST_PHS);
 	}
-
 	if (self->client)
 		PlayerNoise(self, tr.endpos, PNOISE_IMPACT);
 }

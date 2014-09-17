@@ -585,7 +585,7 @@ This is only called when the game first initializes in single player,
 but is called after each death and level change in deathmatch
 ==============
 */
-void InitClientPersistant (gclient_t *client)
+void InitClientPersistant (gclient_t *client) //gives the player basic stats to start off with
 {
 	gitem_t		*item;
 
