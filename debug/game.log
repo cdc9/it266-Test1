@@ -1,0 +1,11 @@
+﻿Build started 9/16/2014 5:51:35 PM.
+     1>Project "C:\Users\Chris Cruz\Downloads\IT266\src\game.vcxproj" on node 2 (ClCompile target(s)).
+     1>ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D BUILDING_REF_GL /D _VC80_UPGRADE=0x0600 /D _WINDLL /Gm /EHsc /MTd /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\debug\\" /Fd".\debug\vc100.pdb" /FR".\debug\\" /Gd /TC /analyze- /errorReport:prompt g_weapon.c
+         g_weapon.c
+     1>c:\users\chris cruz\downloads\it266\src\g_weapon.c(382): warning C4101: 'x' : unreferenced local variable
+     1>Done Building Project "C:\Users\Chris Cruz\Downloads\IT266\src\game.vcxproj" (ClCompile target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.04
