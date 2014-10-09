@@ -1309,8 +1309,8 @@ void PutClientInServer (edict_t *ent)
 	ent->watertype = 0;
 	ent->flags &= ~FL_NO_KNOCKBACK;
 	ent->svflags &= ~SVF_DEADMONSTER;
-	ent->client->weapon_level_blaster = 3;
-	ent->client->weapon_level_shotgun = 2;
+	ent->client->weapon_level_blaster = 1;
+	ent->client->weapon_level_shotgun = 1;
 	ent->client->weapon_level_supershotgun = 1;
 	ent->client->weapon_level_machinegun = 1;
 	ent->client->weapon_level_chaingun = 1;
