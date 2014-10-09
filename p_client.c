@@ -298,36 +298,117 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 			{
 			case MOD_BLASTER:
 				message = "was blasted by";
+				attacker -> client -> weapon_level_blaster++;
+				if(attacker -> client -> weapon_level_blaster == 2)
+				{
+					gi.centerprintf(attacker,"Blaster is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_blaster == 3)
+				{
+					gi.centerprintf(attacker,"Blaster is now level 3!");
+				}
 				break;
 			case MOD_SHOTGUN:
 				message = "was gunned down by";
+				attacker -> client -> weapon_level_shotgun++;
+				if(attacker -> client -> weapon_level_shotgun == 2)
+				{
+					gi.centerprintf(attacker,"Shotgun is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_shotgun == 3)
+				{
+					gi.centerprintf(attacker,"Shotgun is now level 3!");
+				}
 				break;
 			case MOD_SSHOTGUN:
 				message = "was blown away by";
 				message2 = "'s super shotgun";
+				attacker -> client -> weapon_level_supershotgun++;
+				if(attacker -> client -> weapon_level_supershotgun == 2)
+				{
+					gi.centerprintf(attacker,"Super shotgun is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_supershotgun == 3)
+				{
+					gi.centerprintf(attacker,"Super shotgun is now level 3!");
+				}
 				break;
 			case MOD_MACHINEGUN:
 				message = "was machinegunned by";
+				attacker -> client -> weapon_level_machinegun++;
+				if(attacker -> client -> weapon_level_machinegun == 2)
+				{
+					gi.centerprintf(attacker,"Machinegun is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_machinegun == 3)
+				{
+					gi.centerprintf(attacker,"Machinegun is now level 3!");
+				}
 				break;
 			case MOD_CHAINGUN:
 				message = "was cut in half by";
 				message2 = "'s chaingun";
+				attacker -> client -> weapon_level_chaingun++;
+				if(attacker -> client -> weapon_level_chaingun == 2)
+				{
+					gi.centerprintf(attacker,"Chaingun is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_chaingun == 3)
+				{
+					gi.centerprintf(attacker,"Chaingun is now level 3!");
+				}
 				break;
 			case MOD_GRENADE:
 				message = "was popped by";
 				message2 = "'s grenade";
+				attacker -> client -> weapon_level_grenadelauncher++;
+				if(attacker -> client -> weapon_level_grenadelauncher == 2)
+				{
+					gi.centerprintf(attacker,"Grenade Launcher is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_grenadelauncher == 3)
+				{
+					gi.centerprintf(attacker,"Grenade Launcher is now level 3!");
+				}
 				break;
 			case MOD_G_SPLASH:
 				message = "was shredded by";
 				message2 = "'s shrapnel";
+				attacker -> client -> weapon_level_grenadelauncher++;
+				if(attacker -> client -> weapon_level_grenadelauncher == 2)
+				{
+					gi.centerprintf(attacker,"Grenade Launcher is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_grenadelauncher == 3)
+				{
+					gi.centerprintf(attacker,"Grenade Launcher is now level 3!");
+				}
 				break;
 			case MOD_ROCKET:
 				message = "ate";
 				message2 = "'s rocket";
+				attacker -> client -> weapon_level_rocket++;
+				if(attacker -> client -> weapon_level_rocket == 2)
+				{
+					gi.centerprintf(attacker,"Rocket Launcher is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_rocket == 3)
+				{
+					gi.centerprintf(attacker,"Rocket Launcher is now level 3!");
+				}
 				break;
 			case MOD_R_SPLASH:
 				message = "almost dodged";
 				message2 = "'s rocket";
+				attacker -> client -> weapon_level_rocket++;
+				if(attacker -> client -> weapon_level_rocket == 2)
+				{
+					gi.centerprintf(attacker,"Rocket Launcher is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_rocket == 3)
+				{
+					gi.centerprintf(attacker,"Rocket Launcher is now level 3!");
+				}
 				break;
 			case MOD_HYPERBLASTER:
 				message = "was melted by";
@@ -335,26 +416,80 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				break;
 			case MOD_RAILGUN:
 				message = "was railed by";
+				attacker -> client -> weapon_level_railgun++;
+				if(attacker -> client -> weapon_level_railgun == 2)
+				{
+					gi.centerprintf(attacker,"Railgun is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_railgun == 3)
+				{
+					gi.centerprintf(attacker,"Railgun is now level 3!");
+				}
 				break;
 			case MOD_BFG_LASER:
 				message = "saw the pretty lights from";
 				message2 = "'s BFG";
+				attacker -> client -> weapon_level_bfg++;
+				if(attacker -> client -> weapon_level_bfg == 2)
+				{
+					gi.centerprintf(attacker,"BFG is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_bfg == 3)
+				{
+					gi.centerprintf(attacker,"BFG is now level 3!");
+				}
 				break;
 			case MOD_BFG_BLAST:
 				message = "was disintegrated by";
 				message2 = "'s BFG blast";
+				attacker -> client -> weapon_level_bfg++;
+				if(attacker -> client -> weapon_level_bfg == 2)
+				{
+					gi.centerprintf(attacker,"BFG is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_bfg == 3)
+				{
+					gi.centerprintf(attacker,"BFG is now level 3!");
+				}
 				break;
 			case MOD_BFG_EFFECT:
 				message = "couldn't hide from";
 				message2 = "'s BFG";
+				attacker -> client -> weapon_level_bfg++;
+				if(attacker -> client -> weapon_level_bfg == 2)
+				{
+					gi.centerprintf(attacker,"BFG is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_bfg == 3)
+				{
+					gi.centerprintf(attacker,"BFG is now level 3!");
+				}
 				break;
 			case MOD_HANDGRENADE:
 				message = "caught";
 				message2 = "'s handgrenade";
+				attacker -> client -> weapon_level_grenade++;
+				if(attacker -> client -> weapon_level_grenade == 2)
+				{
+					gi.centerprintf(attacker,"Grenade is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_grenade == 3)
+				{
+					gi.centerprintf(attacker,"Grenade is now level 3!");
+				}
 				break;
 			case MOD_HG_SPLASH:
 				message = "didn't see";
 				message2 = "'s handgrenade";
+				attacker -> client -> weapon_level_grenade++;
+				if(attacker -> client -> weapon_level_grenade == 2)
+				{
+					gi.centerprintf(attacker,"Grenade is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_grenade == 3)
+				{
+					gi.centerprintf(attacker,"Grenade is now level 3!");
+				}
 				break;
 			case MOD_HELD_GRENADE:
 				message = "feels";
@@ -606,8 +741,21 @@ void InitClientPersistant (gclient_t *client) //gives the player basic stats to 
 	client->pers.max_grenades	= 50;
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
+	client->weapon_level_blaster = 1;
+	client->weapon_level_shotgun = 2;
+	client->weapon_level_supershotgun = 1;
+	client->weapon_level_machinegun = 1;
+	client->weapon_level_chaingun = 1;
+	client->weapon_level_rocket = 1;
+	client->weapon_level_railgun = 1;
+	client->weapon_level_bfg = 1;
+	client->weapon_level_grenadelauncher = 1;
+	client->weapon_level_grenade = 1;
+
 
 	client->pers.connected = true;
+	//Homing rocket code 
+	client->pers.homing_state	= 0;
 }
 
 
@@ -1080,6 +1228,7 @@ void PutClientInServer (edict_t *ent)
 	vec3_t	mins = {-16, -16, -24};
 	vec3_t	maxs = {16, 16, 32};
 	int		index;
+//	int		weapon_level;
 	vec3_t	spawn_origin, spawn_angles;
 	gclient_t	*client;
 	int		i;
@@ -1160,6 +1309,16 @@ void PutClientInServer (edict_t *ent)
 	ent->watertype = 0;
 	ent->flags &= ~FL_NO_KNOCKBACK;
 	ent->svflags &= ~SVF_DEADMONSTER;
+	ent->client->weapon_level_blaster = 3;
+	ent->client->weapon_level_shotgun = 2;
+	ent->client->weapon_level_supershotgun = 1;
+	ent->client->weapon_level_machinegun = 1;
+	ent->client->weapon_level_chaingun = 1;
+	ent->client->weapon_level_rocket = 1;
+	ent->client->weapon_level_railgun = 1;
+	ent->client->weapon_level_bfg = 1;
+	ent->client->weapon_level_grenadelauncher = 1;
+	ent->client->weapon_level_grenade = 1;
 
 	VectorCopy (mins, ent->mins);
 	VectorCopy (maxs, ent->maxs);
@@ -1578,6 +1737,11 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		return;
 	}
 
+	if(ent->client->thrusting)
+	{
+		ApplyThrust(ent);
+	}
+
 	pm_passent = ent;
 
 	if (ent->client->chase_target) {
@@ -1731,6 +1895,18 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		other = g_edicts + i;
 		if (other->inuse && other->client->chase_target == ent)
 			UpdateChaseCam(other);
+	/*
+	if (client -> think_delay <=0)
+	{
+			client->think_delay = 100;
+			//think slowly
+			gi.centerprintf(ent,"position: (%0.4f,%0.4f,%0.4f)",ent->s.origin[0],ent->s.origin[0],ent->s.origin[0]);
+	}
+	else
+	{
+		client->think_delay--;
+	}
+	*/
 	}
 }
 

@@ -330,6 +330,49 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 
 	VectorNormalize (dir);
 
+ // Only change hand blaster effect
+	if (effect & EF_BLASTER && self -> client && self -> client -> weapon_level_blaster >= 3)
+    {
+		bolt = G_Spawn();
+        VectorCopy (start, bolt->s.origin);
+        vectoangles (dir, bolt->s.angles);
+        VectorScale (dir, speed, bolt->velocity);
+        VectorAdd (start, bolt->velocity, bolt->s.old_origin);
+        bolt->clipmask = MASK_SHOT;
+ 
+        bolt->movetype = MOVETYPE_FLYMISSILE;
+        bolt->solid = SOLID_BBOX;
+        bolt->s.renderfx |= RF_BEAM;
+        bolt->s.modelindex = 1;       
+        bolt->owner = self;
+ 
+        bolt->s.frame = 3;
+
+		bolt->s.skinnum = 0xf2f2f0f0; // Change laser color to red
+
+        VectorSet (bolt->mins, -8, -8, -8);
+        VectorSet (bolt->maxs, 8, 8, 8);
+ 
+        bolt->touch = blaster_touch;
+        bolt->nextthink = level.time + 4;
+        bolt->think = G_FreeEdict;
+        bolt->dmg = damage;
+                
+        gi.linkentity (bolt);
+ 
+        if (self->client)
+		{
+			check_dodge (self, bolt->s.origin, dir, speed);
+		}
+        tr = gi.trace (self->s.origin, NULL, NULL, bolt->s.origin, bolt, MASK_SHOT);
+        if (tr.fraction < 1.0)
+        {
+			VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
+            bolt->touch (bolt, tr.ent, NULL, NULL);
+        }
+ 
+        return;
+        }
 	bolt = G_Spawn();
 	bolt->svflags = SVF_DEADMONSTER;
 	// yes, I know it looks weird that projectiles are deadmonsters
@@ -432,7 +475,8 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-
+	if (ent-> client && ent -> client -> weapon_level_grenadelauncher == 2)
+	{
 		if (strncmp(ent->classname,"grenade",8) == 0) // This will make the grenade split into two rockets
 		{
 			for (i = 0; i < 2; i++)
@@ -443,7 +487,7 @@ static void Grenade_Explode (edict_t *ent)
 				fire_rocket(ent->owner, ent->s.origin,random_dir, 100, 600, 120, 80);
 			}
 		}
-
+	}
 	G_FreeEdict (ent);
 }
 
@@ -556,6 +600,52 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	}
 }
 
+// CCH: New think function for homing missiles
+void homing_think (edict_t *ent)
+{
+ edict_t *target = NULL;
+ edict_t *blip = NULL;
+ vec3_t  targetdir, blipdir;
+ vec_t   speed;
+
+ while ((blip = findradius(blip, ent->s.origin, 1000)) != NULL)
+ {
+        if (!(blip->svflags & SVF_MONSTER) && !blip->client)
+                continue;
+        if (blip == ent->owner)
+                continue;
+        if (!blip->takedamage)
+                continue;
+        if (blip->health <= 0)
+                continue;
+        if (!visible(ent, blip))
+                continue;
+        if (!infront(ent, blip))
+                continue;
+        VectorSubtract(blip->s.origin, ent->s.origin, blipdir);
+        blipdir[2] += 16;
+        if ((target == NULL) || (VectorLength(blipdir) < VectorLength(targetdir)))
+        {
+                target = blip;
+                VectorCopy(blipdir, targetdir);
+        }
+ }
+        
+ if (target != NULL)
+ {
+        // target acquired, nudge our direction toward it
+        VectorNormalize(targetdir);
+        VectorScale(targetdir, 0.2, targetdir);
+        VectorAdd(targetdir, ent->movedir, targetdir);
+        VectorNormalize(targetdir);
+        VectorCopy(targetdir, ent->movedir);
+        vectoangles(targetdir, ent->s.angles);
+        speed = VectorLength(ent->velocity);
+       VectorScale(targetdir, speed, ent->velocity);
+ }
+
+ ent->nextthink = level.time + .1;
+}
 
 /*
 =================
@@ -642,8 +732,17 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->s.modelindex = gi.modelindex ("models/objects/rocket/tris.md2");
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
-	rocket->nextthink = level.time + 8000/speed;
-	rocket->think = G_FreeEdict; //free the rocket from game engine if it hasn't hit anything in a long time
+	// CCH: see if this is a player and if they have homing on
+	if (self->client && self -> client -> weapon_level_rocket >= 3 && self->client->pers.homing_state)
+	{
+		rocket->nextthink = level.time + .1;
+        rocket->think = homing_think;
+	} 
+	else 
+	{
+		rocket->nextthink = level.time + 8000/speed;
+        rocket->think = G_FreeEdict; //free the rocket from game engine if it hasn't hit anything in a long time
+	}
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;

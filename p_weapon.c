@@ -745,6 +745,28 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	float	damage_radius;
 	int		radius_damage;
 
+	if(ent ->client && ent -> client -> weapon_level_rocket == 2)
+	{
+		damage = 120 + (int)(random() * 30.0);
+		radius_damage = 130;
+		damage_radius = 150;
+		if (is_quad)
+		{
+			damage *= 4;
+			radius_damage *= 4;
+		}
+	}
+	if(ent ->client && ent -> client -> weapon_level_rocket >= 3)
+	{
+		damage = 150 + (int)(random() * 30.0);
+		radius_damage = 130;
+		damage_radius = 150;
+		if (is_quad)
+		{
+			damage *= 4;
+			radius_damage *= 4;
+		}
+	}
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
 	damage_radius = 120;
@@ -828,12 +850,45 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 void Weapon_Blaster_Fire (edict_t *ent)
 {
 	int		damage;
+	//New Code
+	vec3_t tempvec;
 
-	if (deathmatch->value)
+	if (deathmatch ->value && ent -> client && ent -> client -> weapon_level_blaster == 2)
+		damage = 10;
+	else if(deathmatch ->value && ent ->client && ent -> client -> weapon_level_blaster >= 3)
+		damage = 25;
+	else if (deathmatch->value)
 		damage = 15;
 	else
 		damage = 10;
 	Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
+	// add new bolts 
+	if (ent -> client -> weapon_level_blaster == 2)
+	{
+	VectorSet(tempvec, 0, 8, 0);
+	VectorAdd(tempvec, vec3_origin, tempvec);
+	Blaster_Fire (ent, tempvec, damage, false, EF_BLASTER);
+		if(ent->client->ps.gunframe == 5) // First frame
+		{
+			ent->client->ps.gunframe+=2;
+		}
+		else
+        {
+			ent->client->ps.gunframe++;
+        }
+	}
+	
+	else if (ent -> client -> weapon_level_blaster >= 3)
+	{
+		if(ent->client->ps.gunframe == 5) // First frame
+		{
+			ent->client->ps.gunframe+=3;
+		}
+		else
+		{
+			ent->client->ps.gunframe++;
+	    }
+	}
 	ent->client->ps.gunframe++;
 }
 
@@ -1190,7 +1245,15 @@ void weapon_shotgun_fire (edict_t *ent)
 		kick *= 4;
 	}
 
-	if (deathmatch->value)
+	if (deathmatch->value && ent->client->weapon_level_shotgun == 2)
+	{
+		fire_shotgun (ent, start, forward, damage, kick, 250, 250, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+	}
+	else if (deathmatch->value && ent->client->weapon_level_shotgun >= 3)
+	{
+		fire_shotgun (ent, start, forward, damage, kick, 100, 100, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+	}
+	else if (deathmatch->value)
 		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
 	else
 		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_SHOTGUN_COUNT, MOD_SHOTGUN);
@@ -1287,6 +1350,8 @@ void weapon_railgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage;
 	int			kick;
+	vec3_t		tempvec;
+	int			x,y,z;
 
 	if (deathmatch->value)
 	{	// normal damage is too extreme in dm
@@ -1313,7 +1378,25 @@ void weapon_railgun_fire (edict_t *ent)
 	VectorSet(offset, 0, 7,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 	fire_rail (ent, start, forward, damage, kick);
+	//new code
+	if (ent -> client -> weapon_level_railgun == 2)
+	{
+		VectorSet(tempvec, 0, 8, 0);
+		VectorAdd(tempvec, vec3_origin, tempvec);
+		//Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
+		fire_rail (ent, start, forward, damage, kick);
+	}
+	if (ent -> client -> weapon_level_railgun >= 3)
+	{
+		VectorSet(tempvec, 0, start[1] - (start[1] + 20), 0);
+		VectorAdd(tempvec, start, tempvec);
+		fire_rail (ent, tempvec, forward, damage, kick);
 
+		VectorSet(tempvec, 0, start[1] - (start[1] - 20), 0);
+		VectorAdd(tempvec, start, tempvec);
+		fire_rail (ent, tempvec, forward, damage, kick);
+		
+	}
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);

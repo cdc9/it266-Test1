@@ -880,6 +880,52 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+void CMD_Print_Position(edict_t *ent)
+{
+	if(!ent)return;
+	gi.centerprintf(ent,"position: (%0.4f,%0.4f,%0.4f)",ent->s.origin[0],ent->s.origin[0],ent->s.origin[0]);
+}
+
+/*
+=================
+Cmd_Thrust_f
+ 
+MUCE:
+To set jetpack on or off
+=================
+*/
+void Cmd_Thrust_f (edict_t *ent)
+{
+	char    *string;
+ 
+    string=gi.args();
+ 
+    if (Q_stricmp ( string, "on") == 0)
+    {
+		ent->client->thrusting=1;
+        ent->client->next_thrust_sound=0;
+    }
+    else
+    {
+    ent->client->thrusting=0;
+    }
+}
+
+/*
+=================
+Cmd_Homing_f
+CCH: whole new function for adjusting homing missile state
+=================
+*/
+void Cmd_Homing_f (edict_t *ent)
+{
+	if(ent -> client && ent ->client -> weapon_level_rocket >= 3)
+	{
+		ent->client->pers.homing_state = 1;
+	}
+  
+ }
+
 
 /*
 =================
@@ -920,7 +966,11 @@ void ClientCommand (edict_t *ent)
 		Cmd_Help_f (ent);
 		return;
 	}
-
+	if (Q_stricmp (cmd, "position") == 0)
+	{
+		CMD_Print_Position (ent);
+		return;
+	}
 	if (level.intermissiontime)
 		return;
 
@@ -968,6 +1018,17 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
-	else	// anything that doesn't match a command will be a chat
+	//Jetpack Code
+	else if (Q_stricmp (cmd, "wave") == 0)
+        Cmd_Wave_f (ent);
+	// MUCE:  added to jetpack thrust!
+    else if (Q_stricmp(cmd, "thrust") == 0 )
+        Cmd_Thrust_f (ent);
+	// CCH: new 'homing' command
+	else if (Q_stricmp (cmd, "homing") == 0)
+        Cmd_Homing_f (ent);
+	else 	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
+
+	
 }

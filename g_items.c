@@ -1421,7 +1421,7 @@ always owned, never in the world
 		0,
 		1,
 		"Grenades",
-		IT_WEAPON|IT_STAY_COOP,
+		IT_WEAPON|IT_STAY_COOP, //bitwise math. Results gets stored in flags
 		WEAP_GRENADELAUNCHER,
 		NULL,
 		0,

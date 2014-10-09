@@ -844,6 +844,8 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
+	//New persistant homing missle code
+	qboolean       homing_state;  // are homing missiles activated
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -941,6 +943,23 @@ struct gclient_s //heres where you add player specific data and variable.
 
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
+
+	int			think_delay;
+
+	//Variables for each weapon, for each player
+	int			weapon_level_blaster;
+	int			weapon_level_shotgun;
+	int			weapon_level_supershotgun;
+	int			weapon_level_machinegun;
+	int			weapon_level_chaingun;
+	int			weapon_level_rocket;
+	int			weapon_level_railgun;
+	int			weapon_level_bfg;
+	int			weapon_level_grenadelauncher;
+	int			weapon_level_grenade;
+	//JetPack Code
+	qboolean	thrusting;			//1 on 0 off
+	float		next_thrust_sound;  //thing
 };
 
 
