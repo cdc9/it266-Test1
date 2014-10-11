@@ -1225,7 +1225,12 @@ void weapon_shotgun_fire (edict_t *ent)
 	int			damage = 4;
 	int			kick = 8;
 
-	if (ent->client->ps.gunframe == 9)
+	if (deathmatch->value && ent->client->weapon_level_shotgun >= 3 && ent->client->ps.gunframe == 9)
+	{
+		damage = 8;
+		ent->client->ps.gunframe+=3;
+	}
+	else if(ent->client->ps.gunframe == 9)
 	{
 		ent->client->ps.gunframe++;
 		return;
@@ -1247,11 +1252,7 @@ void weapon_shotgun_fire (edict_t *ent)
 
 	if (deathmatch->value && ent->client->weapon_level_shotgun == 2)
 	{
-		fire_shotgun (ent, start, forward, damage, kick, 250, 250, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
-	}
-	else if (deathmatch->value && ent->client->weapon_level_shotgun >= 3)
-	{
-		fire_shotgun (ent, start, forward, damage, kick, 100, 100, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
+		fire_shotgun (ent, start, forward, 6, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
 	}
 	else if (deathmatch->value)
 		fire_shotgun (ent, start, forward, damage, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);

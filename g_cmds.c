@@ -1027,6 +1027,20 @@ void ClientCommand (edict_t *ent)
 	// CCH: new 'homing' command
 	else if (Q_stricmp (cmd, "homing") == 0)
         Cmd_Homing_f (ent);
+	//Anti-Gravity Boots
+	else if (Q_stricmp (cmd, "boots") == 0)
+        {
+			if (ent->flags & FL_BOOTS)
+            {
+				gi.cprintf (ent, PRINT_HIGH, "Anti Gravity Boots off\n");
+                ent->flags -= FL_BOOTS;
+            }
+            else
+            {
+				gi.cprintf (ent, PRINT_HIGH, "Anti Gravity Boots on\n");
+                ent->flags |= FL_BOOTS;
+            }
+        }
 	else 	// anything that doesn't match a command will be a chat
 		Cmd_Say_f (ent, false, true);
 

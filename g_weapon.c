@@ -135,7 +135,6 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 		VectorMA (start, 8192, forward, end);
 		VectorMA (end, r, right, end);
 		VectorMA (end, u, up, end);
-
 		if (gi.pointcontents (start) & MASK_WATER)
 		{
 			water = true;
@@ -733,7 +732,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
 	// CCH: see if this is a player and if they have homing on
-	if (self->client && self -> client -> weapon_level_rocket >= 3 && self->client->pers.homing_state)
+	if (self->client && self->client->pers.homing_state && self -> client -> weapon_level_rocket >= 3 )
 	{
 		rocket->nextthink = level.time + .1;
         rocket->think = homing_think;
