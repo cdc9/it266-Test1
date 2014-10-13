@@ -1,6 +1,8 @@
 #include "g_local.h"
 #include "m_player.h"
 
+#include "grapple.h"
+
 void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 
 void SP_misc_teleporter_dest (edict_t *ent);
@@ -413,6 +415,15 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 			case MOD_HYPERBLASTER:
 				message = "was melted by";
 				message2 = "'s hyperblaster";
+				attacker -> client -> weapon_level_hyperblaster++;
+				if(attacker -> client -> weapon_level_hyperblaster == 2)
+				{
+					gi.centerprintf(attacker,"Hyperblaster is now level 2!");
+				}
+				if(attacker -> client -> weapon_level_hyperblaster == 3)
+				{
+					gi.centerprintf(attacker,"Hyperblaster is now level 3!");
+				}
 				break;
 			case MOD_RAILGUN:
 				message = "was railed by";
@@ -617,7 +628,11 @@ player_die
 void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
 	int		n;
-
+	//Grapple Code
+	if (self->client->hook)
+	{
+		Release_Grapple(self->client->hook);
+	}
 	VectorClear (self->avelocity);
 
 	self->takedamage = DAMAGE_YES;
@@ -746,7 +761,7 @@ void InitClientPersistant (gclient_t *client) //gives the player basic stats to 
 	client->weapon_level_supershotgun = 1;
 	client->weapon_level_machinegun = 1;
 	client->weapon_level_chaingun = 1;
-	client->weapon_level_rocket = 1;
+	client->weapon_level_rocket = 3;
 	client->weapon_level_railgun = 1;
 	client->weapon_level_bfg = 1;
 	client->weapon_level_grenadelauncher = 1;
@@ -1318,7 +1333,8 @@ void PutClientInServer (edict_t *ent)
 	ent->client->weapon_level_railgun = 1;
 	ent->client->weapon_level_bfg = 1;
 	ent->client->weapon_level_grenadelauncher = 1;
-	ent->client->weapon_level_grenade = 1;
+	ent->client->weapon_level_hyperblaster = 1;
+	ent->client->jumpCount = 0;
 
 	VectorCopy (mins, ent->mins);
 	VectorCopy (maxs, ent->maxs);
@@ -1370,6 +1386,11 @@ void PutClientInServer (edict_t *ent)
 	ent->s.angles[ROLL] = 0;
 	VectorCopy (ent->s.angles, client->ps.viewangles);
 	VectorCopy (ent->s.angles, client->v_angle);
+
+	//Flash Grenade Code
+    client->grenadeType = GRENADE_NORMAL;
+    client->blindBase = 0;
+    client->blindTime = 0;
 
 	// spawn a spectator
 	if (client->pers.spectator) {
@@ -1736,7 +1757,17 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			level.exitintermission = true;
 		return;
 	}
-
+	//Grapple Hook
+	if (client->on_hook == true)
+    {
+        Pull_Grapple(ent);
+        client->ps.pmove.gravity = 0;
+    }
+    else
+    {
+        client->ps.pmove.gravity = sv_gravity->value;
+    }
+	//Jetpack
 	if(ent->client->thrusting)
 	{
 		ApplyThrust(ent);
@@ -1744,6 +1775,37 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 
 	pm_passent = ent;
 
+	// All this below deals with Double-Jumping
+	if(ent->client && ent->client->jumpCount ==20)
+	{
+		gi.centerprintf(ent,"You now have a double jump!!");
+	}
+	if(ent->client && ent->client->jumpCount >=20)
+	{
+		if (ent->groundentity)
+		{
+			ent->timestamp = level.time;
+		}
+		if (!ent->groundentity && !ent->dbljumped && ucmd->upmove > 10)
+		{
+			if (level.time - ent->timestamp >= 0.35) // Time after jump to dbl-jump
+			{
+				// Play sound
+				gi.sound(ent, CHAN_VOICE, gi.soundindex("world/x_light.wav"), 1, ATTN_NORM, 0);
+				//Double jump by this much
+				ent->velocity[2] += 500;
+
+				// Init the vars
+				ent->dbljumped = true;
+				ent->timestamp = 0;
+			}
+		}
+		if (ent->groundentity && ent->dbljumped == true)
+		{
+			ent->dbljumped = false;
+		}
+	}
+	// END ALL DOUBLE-JUMPING CODE
 	if (ent->client->chase_target) {
 
 		client->resp.cmd_angles[0] = SHORT2ANGLE(ucmd->angles[0]);
@@ -1764,7 +1826,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		else
 			client->ps.pmove.pm_type = PM_NORMAL;
 
-		client->ps.pmove.gravity = sv_gravity->value;
+		//client->ps.pmove.gravity = sv_gravity->value;
 		if (ent->flags & FL_BOOTS)
 		{
 			client->ps.pmove.gravity = sv_gravity->value * 0.25;
@@ -1812,6 +1874,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		{
 			gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
 			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
+			ent->client->jumpCount += 1;
 		}
 
 		ent->viewheight = pm.viewheight;
@@ -1900,21 +1963,30 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		if (other->inuse && other->client->chase_target == ent)
 			UpdateChaseCam(other);
 	/*
-	if (client -> think_delay <=0)
+	if (client -> think_health <=0)
 	{
-			client->think_delay = 100;
+		client->self->nextthink = 1000;
+		client->health_count++;
 			//think slowly
-			gi.centerprintf(ent,"position: (%0.4f,%0.4f,%0.4f)",ent->s.origin[0],ent->s.origin[0],ent->s.origin[0]);
+		gi.centerprintf(ent,"Health level: %f",ent->client->health_count);
+		//gi.centerprintf(ent,"position: (%0.4f,%0.4f,%0.4f)",ent->s.origin[0],ent->s.origin[0],ent->s.origin[0]);
 	}
 	else
 	{
-		client->think_delay--;
+		client->think_health--;
 	}
 	*/
+	// Check to see if player pressing the "use" key
+    if (ent->client->buttons & BUTTON_USE && !ent->deadflag && client->hook_frame <= level.framenum)
+    {     
+    Throw_Grapple (ent);     
+    }
+    if    (Ended_Grappling (client) && !ent->deadflag && client->hook)
+    {
+        Release_Grapple (client->hook);
+    }
 	}
 }
-
-
 /*
 ==============
 ClientBeginServerFrame

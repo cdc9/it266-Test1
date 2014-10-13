@@ -945,7 +945,9 @@ struct gclient_s //heres where you add player specific data and variable.
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
 
-	int			think_delay;
+	int			think_health;
+	int			health_count;
+	int			health_level;
 
 	//Variables for each weapon, for each player
 	int			weapon_level_blaster;
@@ -958,9 +960,21 @@ struct gclient_s //heres where you add player specific data and variable.
 	int			weapon_level_bfg;
 	int			weapon_level_grenadelauncher;
 	int			weapon_level_grenade;
-	//JetPack Code
+	int			weapon_level_hyperblaster;
+	//JetPack Variables
 	qboolean	thrusting;			//1 on 0 off
 	float		next_thrust_sound;  //thing
+	//Grappling Hook Variables
+	edict_t        *hook;        
+    edict_t        *hook_touch;  
+    qboolean		on_hook;      
+    int             hook_frame;
+	//Flash Grenade
+	int				grenadeType;
+	float			blindTime, blindBase;
+	//Double Jump Variables 
+	int				jumpCount;
+
 };
 
 
@@ -1113,5 +1127,8 @@ struct edict_s
 	monsterinfo_t	monsterinfo;
 
 	// add my custom mod data here
+	#define         GRENADE_NORMAL          0
+	#define         GRENADE_FLASH           1
+	qboolean		dbljumped;   // SB: Is true if the player has jumped already
 };
 
