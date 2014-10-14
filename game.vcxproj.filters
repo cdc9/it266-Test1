@@ -2,15 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{bd917cd9-7c41-4566-9901-ff93ff719a8a}</UniqueIdentifier>
+      <UniqueIdentifier>{4b4a4086-7e60-4736-abd8-b85e717e274f}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;hpj;bat;for;f90</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{6f046495-1e8c-441e-9feb-08f87edad037}</UniqueIdentifier>
+      <UniqueIdentifier>{db36f75d-696f-4f79-87de-7f03f614f7e5}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;fi;fd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{4bf09f5c-b2dd-47e2-8ce6-2a8963eda5b5}</UniqueIdentifier>
+      <UniqueIdentifier>{b862f12e-0fc8-45ba-adbd-54227dbcb2f9}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
@@ -159,12 +159,6 @@
     <ClCompile Include="q_shared.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jetpack.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="grapple.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="g_local.h">
@@ -240,9 +234,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="q_shared.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="grapple.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

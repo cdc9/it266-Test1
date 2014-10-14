@@ -844,6 +844,7 @@ void InitClientPersistant (gclient_t *client) //gives the player basic stats to 
 
 	client->pers.weapon = item;
 	//If player health level is 2, then increase max health
+	//br66 -you're setting the health to 100 here and again later, probably why health upgrade isn't working
 	client->pers.health			= 100;
 	if(client->health_level == 2)
 	{
@@ -1999,6 +2000,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	//Jetpack code
 	if(ent->client->thrusting)
 	{
+		//br66 visual studio says applythrust is not defined
 		ApplyThrust(ent);
 	}
 
