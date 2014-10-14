@@ -845,8 +845,7 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
-	//New persistant homing missle code
-	qboolean       homing_state;  // are homing missiles activated
+
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -945,11 +944,17 @@ struct gclient_s //heres where you add player specific data and variable.
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
 
-	int			think_health;
+	//Variables for leveling up health
 	int			health_count;
 	int			health_level;
 
-	//Variables for each weapon, for each player
+	//Player Speed Variables
+	int			speed_start;
+	int			speed_time;
+	int			speed_count;
+	int			speed_level;
+	int			ClassSpeed;
+	//Level variables for each weapon, for each player
 	int			weapon_level_blaster;
 	int			weapon_level_shotgun;
 	int			weapon_level_supershotgun;
@@ -957,7 +962,6 @@ struct gclient_s //heres where you add player specific data and variable.
 	int			weapon_level_chaingun;
 	int			weapon_level_rocket;
 	int			weapon_level_railgun;
-	int			weapon_level_bfg;
 	int			weapon_level_grenadelauncher;
 	int			weapon_level_grenade;
 	int			weapon_level_hyperblaster;
@@ -969,7 +973,7 @@ struct gclient_s //heres where you add player specific data and variable.
     edict_t        *hook_touch;  
     qboolean		on_hook;      
     int             hook_frame;
-	//Flash Grenade
+	//Flash Grenade Variables
 	int				grenadeType;
 	float			blindTime, blindBase;
 	//Double Jump Variables 
@@ -1127,8 +1131,11 @@ struct edict_s
 	monsterinfo_t	monsterinfo;
 
 	// add my custom mod data here
+
+	//Flash Grenade On/Off
 	#define         GRENADE_NORMAL          0
 	#define         GRENADE_FLASH           1
-	qboolean		dbljumped;   // SB: Is true if the player has jumped already
+	//Is true if the player has jumped already
+	qboolean		dbljumped;   
 };
 

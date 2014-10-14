@@ -557,6 +557,7 @@ void SV_Physics_Pusher (edict_t *ent)
 	pushed_p = pushed;
 	for (part = ent ; part ; part=part->teamchain)
 	{
+		//This code allows the grapple hook to pull in enemies
 		qboolean blocked = false;
         if (part->mynoise2 && part->mynoise2->think == Think_Grapple)
         {

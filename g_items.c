@@ -562,7 +562,17 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 		if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
 			SetRespawn (ent, 30);
 	}
-
+	other->client->health_count++;
+			if(other->client && other->client->health_count == 5)
+			{
+				other->client->health_level++;
+				gi.centerprintf(other,"Your health level is now 2!!");
+			}
+			else if(other->client && other->client->health_count >= 10)
+			{
+				other->client->health_level++;
+				gi.centerprintf(other,"Your health level is now 3!!");
+			}
 	return true;
 }
 

@@ -890,7 +890,6 @@ void CMD_Print_Position(edict_t *ent)
 =================
 Cmd_Thrust_f
  
-MUCE:
 To set jetpack on or off
 =================
 */
@@ -1050,10 +1049,9 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
-	//Jetpack Code
 	else if (Q_stricmp (cmd, "wave") == 0)
         Cmd_Wave_f (ent);
-	// MUCE:  added to jetpack thrust!
+	// //Jetpack Code: Added to jetpack thrust!
     else if (Q_stricmp(cmd, "thrust") == 0 )
         Cmd_Thrust_f (ent);
 	//Flash Grenade Code

@@ -298,6 +298,7 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 		{
 			switch (mod)
 			{
+			//Each time a player kills someone with a specific weapon, increase that specific weapon's level for the player. Same for the Health count.
 			case MOD_BLASTER:
 				message = "was blasted by";
 				attacker -> client -> weapon_level_blaster++;
@@ -308,6 +309,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				if(attacker -> client -> weapon_level_blaster == 3)
 				{
 					gi.centerprintf(attacker,"Blaster is now level 3!");
+				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
 				}
 				break;
 			case MOD_SHOTGUN:
@@ -320,6 +332,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				if(attacker -> client -> weapon_level_shotgun == 3)
 				{
 					gi.centerprintf(attacker,"Shotgun is now level 3!");
+				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
 				}
 				break;
 			case MOD_SSHOTGUN:
@@ -334,6 +357,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Super shotgun is now level 3!");
 				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
+				}
 				break;
 			case MOD_MACHINEGUN:
 				message = "was machinegunned by";
@@ -345,6 +379,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				if(attacker -> client -> weapon_level_machinegun == 3)
 				{
 					gi.centerprintf(attacker,"Machinegun is now level 3!");
+				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
 				}
 				break;
 			case MOD_CHAINGUN:
@@ -359,6 +404,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Chaingun is now level 3!");
 				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
+				}
 				break;
 			case MOD_GRENADE:
 				message = "was popped by";
@@ -371,6 +427,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				if(attacker -> client -> weapon_level_grenadelauncher == 3)
 				{
 					gi.centerprintf(attacker,"Grenade Launcher is now level 3!");
+				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
 				}
 				break;
 			case MOD_G_SPLASH:
@@ -385,6 +452,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Grenade Launcher is now level 3!");
 				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
+				}
 				break;
 			case MOD_ROCKET:
 				message = "ate";
@@ -397,6 +475,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				if(attacker -> client -> weapon_level_rocket == 3)
 				{
 					gi.centerprintf(attacker,"Rocket Launcher is now level 3!");
+				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
 				}
 				break;
 			case MOD_R_SPLASH:
@@ -411,6 +500,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Rocket Launcher is now level 3!");
 				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
+				}
 				break;
 			case MOD_HYPERBLASTER:
 				message = "was melted by";
@@ -424,6 +524,17 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Hyperblaster is now level 3!");
 				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
+				}
 				break;
 			case MOD_RAILGUN:
 				message = "was railed by";
@@ -436,45 +547,29 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Railgun is now level 3!");
 				}
+				attacker->client->health_count++;
+				if(attacker->client && attacker->client->health_count == 5)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 2!!");
+				}
+				else if(attacker->client && attacker->client->health_count >= 10)
+				{
+					attacker->client->health_level++;
+					gi.centerprintf(attacker,"Your health level is now 3!!");
+				}
 				break;
 			case MOD_BFG_LASER:
 				message = "saw the pretty lights from";
 				message2 = "'s BFG";
-				attacker -> client -> weapon_level_bfg++;
-				if(attacker -> client -> weapon_level_bfg == 2)
-				{
-					gi.centerprintf(attacker,"BFG is now level 2!");
-				}
-				if(attacker -> client -> weapon_level_bfg == 3)
-				{
-					gi.centerprintf(attacker,"BFG is now level 3!");
-				}
 				break;
 			case MOD_BFG_BLAST:
 				message = "was disintegrated by";
 				message2 = "'s BFG blast";
-				attacker -> client -> weapon_level_bfg++;
-				if(attacker -> client -> weapon_level_bfg == 2)
-				{
-					gi.centerprintf(attacker,"BFG is now level 2!");
-				}
-				if(attacker -> client -> weapon_level_bfg == 3)
-				{
-					gi.centerprintf(attacker,"BFG is now level 3!");
-				}
 				break;
 			case MOD_BFG_EFFECT:
 				message = "couldn't hide from";
 				message2 = "'s BFG";
-				attacker -> client -> weapon_level_bfg++;
-				if(attacker -> client -> weapon_level_bfg == 2)
-				{
-					gi.centerprintf(attacker,"BFG is now level 2!");
-				}
-				if(attacker -> client -> weapon_level_bfg == 3)
-				{
-					gi.centerprintf(attacker,"BFG is now level 3!");
-				}
 				break;
 			case MOD_HANDGRENADE:
 				message = "caught";
@@ -488,6 +583,7 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Grenade is now level 3!");
 				}
+				attacker->client->health_count++;
 				break;
 			case MOD_HG_SPLASH:
 				message = "didn't see";
@@ -501,6 +597,7 @@ void ClientObituary (edict_t *self, edict_t *inflictor, edict_t *attacker)
 				{
 					gi.centerprintf(attacker,"Grenade is now level 3!");
 				}
+				attacker->client->health_count++;
 				break;
 			case MOD_HELD_GRENADE:
 				message = "feels";
@@ -746,31 +843,40 @@ void InitClientPersistant (gclient_t *client) //gives the player basic stats to 
 	client->pers.inventory[client->pers.selected_item] = 1;
 
 	client->pers.weapon = item;
-
+	//If player health level is 2, then increase max health
 	client->pers.health			= 100;
+	if(client->health_level == 2)
+	{
+		client->pers.max_health		= 150;
+	}
+	//If player health level is 3, then increase max health
+	else if(client->health_level == 3)
+	{
+		client->pers.max_health		= 200;
+	}
+	else
+	{
 	client->pers.max_health		= 100;
-
+	}
 	client->pers.max_bullets	= 200;
 	client->pers.max_shells		= 100;
 	client->pers.max_rockets	= 50;
 	client->pers.max_grenades	= 50;
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
+	//Starting off each player with a weapon level
 	client->weapon_level_blaster = 1;
-	client->weapon_level_shotgun = 2;
+	client->weapon_level_shotgun = 1;
 	client->weapon_level_supershotgun = 1;
 	client->weapon_level_machinegun = 1;
 	client->weapon_level_chaingun = 1;
-	client->weapon_level_rocket = 3;
+	client->weapon_level_rocket = 1;
 	client->weapon_level_railgun = 1;
-	client->weapon_level_bfg = 1;
 	client->weapon_level_grenadelauncher = 1;
 	client->weapon_level_grenade = 1;
 
 
 	client->pers.connected = true;
-	//Homing rocket code 
-	client->pers.homing_state	= 0;
 }
 
 
@@ -1324,6 +1430,7 @@ void PutClientInServer (edict_t *ent)
 	ent->watertype = 0;
 	ent->flags &= ~FL_NO_KNOCKBACK;
 	ent->svflags &= ~SVF_DEADMONSTER;
+	//These are the starting levels for the weapons. Each time player gets a kill with a weapon, it's level will increase. Max level is 3.
 	ent->client->weapon_level_blaster = 1;
 	ent->client->weapon_level_shotgun = 1;
 	ent->client->weapon_level_supershotgun = 1;
@@ -1331,10 +1438,23 @@ void PutClientInServer (edict_t *ent)
 	ent->client->weapon_level_chaingun = 1;
 	ent->client->weapon_level_rocket = 1;
 	ent->client->weapon_level_railgun = 1;
-	ent->client->weapon_level_bfg = 1;
+	ent->client->weapon_level_grenade = 1;
 	ent->client->weapon_level_grenadelauncher = 1;
 	ent->client->weapon_level_hyperblaster = 1;
+	//Counter for amount of times the player jumps
 	ent->client->jumpCount = 0;
+	//Counter for health level up. Once player has enough count built up, health levels up.
+	ent->client->health_count = 0;
+	ent->client->health_level = 1;
+	//Variables for player speed
+	ent->client->speed_level = 1;
+	ent->client->speed_count = 500;
+	ent->client->speed_time = 0;
+	ent->client->speed_start =0;
+	ent->client->ClassSpeed = 5;
+
+	
+
 
 	VectorCopy (mins, ent->mins);
 	VectorCopy (maxs, ent->maxs);
@@ -1744,6 +1864,115 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	edict_t	*other;
 	int		i, j;
 	pmove_t	pm;
+	vec3_t dir = {0,0,0};
+
+	//This deals with the player speeds
+	float ClassSpeedModifer, t;
+	vec3_t velo;
+	vec3_t  end, forward, right, up,add;
+	ClassSpeedModifer = ent->client->ClassSpeed * 0.2;
+	//Figure out speed
+	VectorClear (velo);
+	AngleVectors (ent->client->v_angle, forward, right, up);
+    VectorScale(forward, ucmd->forwardmove*ClassSpeedModifer, end);
+	VectorAdd(end,velo,velo);
+	AngleVectors (ent->client->v_angle, forward, right, up);
+    VectorScale(right, ucmd->sidemove*ClassSpeedModifer, end);
+	VectorAdd(end,velo,velo);
+	//if not in water set it up so they aren't moving up or down when they press forward
+	if (ent->waterlevel == 0)
+	{
+         velo[2] = 0;
+	}
+	if (ent->waterlevel==1)//feet are in the water
+	{
+         //Water slows you down or at least I think it should
+         velo[0] *= 0.875;
+         velo[1] *= 0.875;
+         velo[2] *= 0.875;
+         ClassSpeedModifer *= 0.875;
+	}
+	else if (ent->waterlevel==2)//waist is in the water
+	{
+         //Water slows you down or at least I think it should
+         velo[0] *= 0.75;
+         velo[1] *= 0.75;
+         velo[2] *= 0.75;
+         ClassSpeedModifer *= 0.75;
+	}
+	else if (ent->waterlevel==3)//whole body is in the water
+	{
+         //Water slows you down or at least I think it should
+         velo[0] *= 0.6;
+         velo[1] *= 0.6;
+         velo[2] *= 0.6;
+         ClassSpeedModifer *= 0.6;
+	}
+	if (ent->groundentity)//add 
+         VectorAdd(velo,ent->velocity,ent->velocity);
+	else if (ent->waterlevel)
+         VectorAdd(velo,ent->velocity,ent->velocity);
+	else
+	{
+         //Allow for a little movement but not as much
+         velo[0] *= 0.25;
+         velo[1] *= 0.25;
+         velo[2] *= 0.25;
+         VectorAdd(velo,ent->velocity,ent->velocity);
+	}
+	//Make sure not going too fast. This slows down grapple too
+	t = VectorLength(ent->velocity);
+	if (t > 300*ClassSpeedModifer || t < -300*ClassSpeedModifer)
+	{
+         VectorScale (ent->velocity, 300 * ClassSpeedModifer / t, ent->velocity);
+	}
+ 
+	//Set these to 0 so pmove thinks we aren't pressing forward or sideways since we are handling all the player forward and sideways speeds
+	ucmd->forwardmove = 0;
+	ucmd->sidemove = 0;
+	//This is the end of the player speed mod
+	//This code is a Movement think function. The longer the player stays alive, eventually his speed and health will increase.
+	if (ent->client->pers.health > 0)
+	{
+		if (ent->client->speed_start <= 0)
+		{
+			if (ent->client->speed_count > 0)
+			{
+				ent->client->speed_count--;
+				ent->client->speed_time++;
+				//If player stayed alive for 25 seconds, increase his overall speed
+				if(ent->client->speed_time >= 25 && ent->client->speed_time < 50)
+				{
+					ent->client->ClassSpeed =8;
+				}
+				//Let them know their level increased
+				if(ent->client->speed_time == 25)
+				{
+					gi.centerprintf(ent,"Your Speed has increased!");
+					// Play sound
+					gi.sound(ent, CHAN_VOICE, gi.soundindex("world/x_light.wav"), 1, ATTN_NORM, 0);
+				}
+				//If player stayed alive for 50 seconds, greatly increase his overall speed
+				if(ent->client->speed_time >= 50)
+				{
+					ent->client->ClassSpeed = 12;
+				}
+				//Let them know their level increased
+				if(ent->client->speed_time == 50)
+				{
+					gi.centerprintf(ent,"Your Speed has increased EVEN MORE!");
+					// Play sound
+					gi.sound(ent, CHAN_VOICE, gi.soundindex("world/x_light.wav"), 1, ATTN_NORM, 0);
+				}
+				
+			}
+			ent->client->speed_start = 100;
+		}
+		else
+		{
+			ent->client->speed_start--;
+		}
+	}
 
 	level.current_entity = ent;
 	client = ent->client;
@@ -1767,7 +1996,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
     {
         client->ps.pmove.gravity = sv_gravity->value;
     }
-	//Jetpack
+	//Jetpack code
 	if(ent->client->thrusting)
 	{
 		ApplyThrust(ent);
@@ -1780,6 +2009,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	{
 		gi.centerprintf(ent,"You now have a double jump!!");
 	}
+	//If player has jumped at least 20 times, then he is allowed to double jump
 	if(ent->client && ent->client->jumpCount >=20)
 	{
 		if (ent->groundentity)
@@ -1827,6 +2057,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			client->ps.pmove.pm_type = PM_NORMAL;
 
 		//client->ps.pmove.gravity = sv_gravity->value;
+		//Anti-Gravity Boots
 		if (ent->flags & FL_BOOTS)
 		{
 			client->ps.pmove.gravity = sv_gravity->value * 0.25;
@@ -1874,7 +2105,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		{
 			gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
 			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
-			ent->client->jumpCount += 1;
+			ent->client->jumpCount += 1; //Add to count once player has jumped
 		}
 
 		ent->viewheight = pm.viewheight;
@@ -1962,20 +2193,8 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		other = g_edicts + i;
 		if (other->inuse && other->client->chase_target == ent)
 			UpdateChaseCam(other);
-	/*
-	if (client -> think_health <=0)
-	{
-		client->self->nextthink = 1000;
-		client->health_count++;
-			//think slowly
-		gi.centerprintf(ent,"Health level: %f",ent->client->health_count);
-		//gi.centerprintf(ent,"position: (%0.4f,%0.4f,%0.4f)",ent->s.origin[0],ent->s.origin[0],ent->s.origin[0]);
-	}
-	else
-	{
-		client->think_health--;
-	}
-	*/
+	
+	
 	// Check to see if player pressing the "use" key
     if (ent->client->buttons & BUTTON_USE && !ent->deadflag && client->hook_frame <= level.framenum)
     {     

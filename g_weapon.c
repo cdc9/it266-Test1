@@ -555,16 +555,17 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	if (ent-> client && ent -> client -> weapon_level_grenadelauncher == 2)
+	//If weapon is level 3
+	if (ent->owner-> client && ent ->owner-> client -> weapon_level_grenadelauncher >= 3)
 	{
-		if (strncmp(ent->classname,"grenade",8) == 0) // This will make the grenade split into two rockets
+		if (strncmp(ent->classname,"grenade",8) == 0) // This will make the grenade split into four other grenades
 		{
-			for (i = 0; i < 2; i++)
+			for (i = 0; i < 4; i++)
 			{
 				random_dir[0] = crandom();
 				random_dir[1] = crandom();
 				random_dir[2] = crandom();
-				fire_rocket(ent->owner, ent->s.origin,random_dir, 100, 600, 120, 80);
+				fire_grenade2 (ent->owner, ent->s.origin, random_dir, 60, 640, 3, 120, false);
 			}
 		}
 	}
@@ -750,7 +751,7 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	// fire rails here
+	// If weapon level is 3, shoot railgun shots from where rocket explodes
 	if(ent->owner->client && ent->owner->client->weapon_level_rocket >= 3)
 	{
 		fire_rail(ent ->owner, ent->s.origin, plane->normal, 100, 0);

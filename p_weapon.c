@@ -544,11 +544,30 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 
 	timer = ent->client->grenade_time - level.time;
 	speed = GRENADE_MINSPEED + (GRENADE_TIMER - timer) * ((GRENADE_MAXSPEED - GRENADE_MINSPEED) / GRENADE_TIMER);
+	//If weapon level is 2, increase blast radius
+	if(ent->client && ent->client->weapon_level_grenade ==2)
+	{
+		radius = radius +30;
+	}
+	//If weapon level is 3, quadruple blast radius, triple damage, but double time before exploding 
+	else if(ent->client && ent->client->weapon_level_grenade >=3)
+	{
+		radius = radius *4;
+		timer = timer *2;
+		damage = 300;
+	}
 	fire_grenade2 (ent, start, forward, damage, speed, timer, radius, held);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
-		ent->client->pers.inventory[ent->client->ammo_index]--;
-
+	if(ent->client && ent->client->weapon_level_grenade >=3)
+	{
+		if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+			ent->client->pers.inventory[ent->client->ammo_index] = ent->client->pers.inventory[ent->client->ammo_index]-3;
+	}
+	else
+	{
+		if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+			ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
 	ent->client->grenade_time = level.time + 1.0;
 
 	if(ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
@@ -705,9 +724,14 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
-
-	fire_grenade (ent, start, forward, damage, 600, 2.5, radius);
-
+	if(ent->client && ent->client->weapon_level_grenadelauncher >= 2)
+	{
+		fire_grenade (ent, start, forward, damage, 800, 2.5, radius);
+	}
+	else
+	{
+		fire_grenade (ent, start, forward, damage, 600, 2.5, radius);
+	}
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
 	gi.WriteByte (MZ_GRENADE | is_silenced);
@@ -745,6 +769,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	float	damage_radius;
 	int		radius_damage;
 
+	//If weapon level is 2, increase blast radius and damage
 	if(ent->client && ent->client-> weapon_level_rocket == 2)
 	{
 		damage = 110 + (int)(random() * 20.0);
@@ -756,6 +781,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 			radius_damage *= 4;
 		}
 	}
+	//If weapon level is 3, increase blast radius and damage
 	if(ent->client && ent->client->weapon_level_rocket >= 3)
 	{
 		damage = 120 + (int)(random() * 20.0);
@@ -783,11 +809,12 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
-	
+	//If weapon level is 2, increase firing speed
 	if(ent->client && ent->client->weapon_level_rocket ==2)
 	{
 	fire_rocket (ent, start, forward, damage, 1000, damage_radius, radius_damage);
 	}
+	//If weapon level is 3, greatly increase speed
 	else if(ent->client && ent->client->weapon_level_rocket >=3)
 	{
 	fire_rocket (ent, start, forward, damage, 2000, damage_radius, radius_damage);
@@ -938,9 +965,10 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 		}
 		else
 		{
+			//New code. If weapon level is 3, allow 3 shots to be fired at the same time 
 			if(ent->client && ent->client->weapon_level_hyperblaster >= 3)
 			{
-				// STEVE .... the lines below are new !
+				
 				// ...........TRIPLE HYPER BLASTER !!!
 
 				if ((ent->client->ps.gunframe == 6) || (ent->client->ps.gunframe == 9))
@@ -968,12 +996,12 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 				offset[1] = -8 * sin(rotation);
 				offset[2] = 8 * cos(rotation);
 				Blaster_Fire (ent, offset, 20, true, effect);
-				// deduct 3 times the amount of ammo as before (... the *3 on end)
+				// deduct normal amount of ammo
 				ent->client->pers.inventory[ent->client->ammo_index] -= ent->client->pers.weapon->quantity;
 			}
+			//If weapon level is 2, allow 2 shots to be fired at the same time.
 			if(ent->client && ent->client->weapon_level_hyperblaster == 2)
 			{
-				// STEVE .... the lines below are new !
 				// ...........TRIPLE HYPER BLASTER !!!
 
 				if ((ent->client->ps.gunframe == 6) || (ent->client->ps.gunframe == 9))
@@ -994,7 +1022,7 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 				offset[1] = -8 * sin(rotation);
 				offset[2] = 8 * cos(rotation);
 				Blaster_Fire (ent, offset, 20, true, effect);
-
+				//deduct normal amount of ammo
 				ent->client->pers.inventory[ent->client->ammo_index] -= ent->client->pers.weapon->quantity;
 			}
 			rotation = (ent->client->ps.gunframe - 5) * 2*M_PI/6;
@@ -1117,10 +1145,12 @@ void Machinegun_Fire (edict_t *ent)
 	AngleVectors (angles, forward, right, NULL);
 	VectorSet(offset, 0, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+	//If weapon level is 2, increase damage
 	if(ent->client && ent->client->weapon_level_machinegun == 2)
 	{
 		fire_bullet (ent, start, forward, 10, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
 	}
+	// If weapon is 3, increase damage
 	else if(ent->client && ent->client->weapon_level_machinegun >= 3)
 	{
 		fire_bullet (ent, start, forward, 12, kick, 100, 100, MOD_MACHINEGUN);
@@ -1136,6 +1166,7 @@ void Machinegun_Fire (edict_t *ent)
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
+	//If weapon level is NOT 3, then don't reduce ammo when firing. AKA infinite ammo
 	if(!(ent->client && ent->client->weapon_level_machinegun >= 3))
 	{
 		if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
@@ -1267,11 +1298,12 @@ void Chaingun_Fire (edict_t *ent)
 		u = crandom()*4;
 		VectorSet(offset, 0, r, u + ent->viewheight-8);
 		P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
-
+		//If weapon level is 2, reduce the amount of bullet spread when firing
 		if(ent->client && ent->client->weapon_level_chaingun == 2)
 		{
 			fire_bullet (ent, start, forward, damage, kick, 200, 250, MOD_CHAINGUN);
 		}
+		//If weapon level is 3, replace bullets with rapid firing double rockets. It's freaking Awesome.
 		else if(ent->client && ent->client->weapon_level_chaingun >= 3)
 		{
 			VectorSet(offset2, 8, -8, ent->viewheight-8);
@@ -1281,7 +1313,7 @@ void Chaingun_Fire (edict_t *ent)
 			P_ProjectSource (ent->client, ent->s.origin, offset2, forward, right, start);
 			fire_rocket (ent, start, forward, damage, 800, 120, 100);
 		}
-		else
+		else //Else default 
 		{
 		fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
 		}
@@ -1323,7 +1355,7 @@ void weapon_shotgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage = 4;
 	int			kick = 8;
-
+	//If weapon level is 3, reduce amount of frames when firing, causing faster shots and a double shot
 	if (deathmatch->value && ent->client->weapon_level_shotgun >= 3 && ent->client->ps.gunframe == 9)
 	{
 		damage = 8 ;
@@ -1348,7 +1380,7 @@ void weapon_shotgun_fire (edict_t *ent)
 		damage *= 4;
 		kick *= 4;
 	}
-
+	//If weapon level is 2, increase damage slightly
 	if (deathmatch->value && ent->client->weapon_level_shotgun == 2)
 	{
 		fire_shotgun (ent, start, forward, 6, kick, 500, 500, DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
@@ -1402,6 +1434,7 @@ void weapon_supershotgun_fire (edict_t *ent)
 		damage *= 4;
 		kick *= 4;
 	}
+	//If weapon level is 2, double the amount of bullets fired
 	if(ent->client && ent->client->weapon_level_supershotgun == 2)
 	{
 		v[PITCH] = ent->client->v_angle[PITCH];
@@ -1413,8 +1446,10 @@ void weapon_supershotgun_fire (edict_t *ent)
 		AngleVectors (v, forward, NULL, NULL);
 		fire_shotgun (ent, start, forward, damage, kick, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SSHOTGUN_COUNT, MOD_SSHOTGUN);
 	}
+	//If weapon level is 3, replace bullets with 9 rockets in a shotgun-like spread
 	else if(ent->client && ent->client->weapon_level_supershotgun >= 3)
 	{
+		//Setting the direction for each individual rocket. Wish I knew how to make it cleaner. Too lazy to figure out the loop.
 		v[PITCH] = ent->client->v_angle[PITCH];
 		v[YAW]   = ent->client->v_angle[YAW] - 10;
 		v[ROLL]  = ent->client->v_angle[ROLL];
@@ -1452,10 +1487,6 @@ void weapon_supershotgun_fire (edict_t *ent)
 		v[YAW]   = ent->client->v_angle[YAW] - 10;
 		AngleVectors (v, forward, NULL, NULL);
 		fire_rocket (ent, start, forward, 100, 600, 120, 80);
-		//fire_shotgun (ent, start, forward, damage, kick, 100, 250, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
-		v[YAW]   = ent->client->v_angle[YAW] + 5;
-		AngleVectors (v, forward, NULL, NULL);
-		//fire_shotgun (ent, start, forward, damage, kick, 100, 250, DEFAULT_SSHOTGUN_COUNT/2, MOD_SSHOTGUN);
 	}
 	else
 	{
@@ -1535,23 +1566,25 @@ void weapon_railgun_fire (edict_t *ent)
 	VectorSet(offset, 0, 7,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 	fire_rail (ent, start, forward, damage, kick);
-	//new code
+	//If weapon level is 2 fire a double shot
 	if (ent -> client -> weapon_level_railgun == 2)
 	{
-		VectorSet(tempvec, 0, 8, 0);
-		VectorAdd(tempvec, vec3_origin, tempvec);
+		VectorSet(tempvec, 8, -7, ent->viewheight-8);
+		P_ProjectSource (ent->client, ent->s.origin, tempvec, forward, right, start);
 		//Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
 		fire_rail (ent, start, forward, damage, kick);
+		fire_rocket (ent, start, forward, damage, 800, 120, 100);
 	}
+	//If weapon level is 3, fire a triple shot
 	if (ent -> client -> weapon_level_railgun >= 3)
 	{
-		VectorSet(tempvec, 0, start[1] - (start[1] + 20), 0);
-		VectorAdd(tempvec, start, tempvec);
-		fire_rail (ent, tempvec, forward, damage, kick);
+		VectorSet(tempvec, 8, -7, ent->viewheight-8);
+		P_ProjectSource (ent->client, ent->s.origin, tempvec, forward, right, start);
+		fire_rail (ent, start, forward, damage, kick);
 
-		VectorSet(tempvec, 0, start[1] - (start[1] - 20), 0);
-		VectorAdd(tempvec, start, tempvec);
-		fire_rail (ent, tempvec, forward, damage, kick);
+		VectorSet(tempvec, 8, 21, ent->viewheight-8);
+		P_ProjectSource (ent->client, ent->s.origin, tempvec, forward, right, start);
+		fire_rail (ent, start, forward, damage, kick);
 		
 	}
 	// send muzzle flash
